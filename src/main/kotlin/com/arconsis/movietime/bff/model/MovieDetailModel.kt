@@ -15,8 +15,8 @@ data class MovieDetailModel(
     val voteAverage: Double,
     val voteCount: Int,
 
-    val posterPath: String?,
-    val backdropPath: String?,
+    val poster: ImageModel?,
+    val backdrop: ImageModel?,
 
     val genres: List<MovieGenreModel>
 )

@@ -6,5 +6,5 @@ data class MovieListItemDto(
     val originalTitle: String,
     val description: String,
     val releaseDate: String,
-    val posterPath: String?,
+    val poster: ImageDto?,
 )

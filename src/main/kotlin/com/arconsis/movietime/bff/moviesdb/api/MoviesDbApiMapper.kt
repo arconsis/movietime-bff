@@ -1,25 +1,28 @@
 package com.arconsis.movietime.bff.moviesdb.api
 
+import com.arconsis.movietime.bff.model.ImageModel
 import com.arconsis.movietime.bff.model.MovieDetailModel
 import com.arconsis.movietime.bff.model.MovieGenreModel
 import com.arconsis.movietime.bff.model.MovieSearchModel
 import com.arconsis.movietime.bff.moviesdb.api.dto.MoviesDbDetailDto
 import com.arconsis.movietime.bff.moviesdb.api.dto.MoviesDbGenreDto
 import com.arconsis.movietime.bff.moviesdb.api.dto.MoviesDbSearchResultItemDto
-import org.eclipse.microprofile.config.inject.ConfigProperty
 import javax.enterprise.context.ApplicationScoped
 
 @ApplicationScoped
-class MoviesDbApiMapper(@ConfigProperty(name = "movies-db.images.base.thumbnail") private val thumbnailBasePath: String) {
+class MoviesDbApiMapper(private val movieDbImagesConfig: MovieDbImagesConfig) {
 
     fun toSearchResultModel(searchItems: List<MoviesDbSearchResultItemDto>): List<MovieSearchModel> = searchItems.map { it.toModel() }
 
     private fun MoviesDbSearchResultItemDto.toModel(): MovieSearchModel {
-        return MovieSearchModel(id, title, originalTitle, overview, releaseDate, mapImagePathToAbsolute(posterPath))
+        return MovieSearchModel(id, title, originalTitle, overview, releaseDate, posterPath?.mapImagePathToAbsolute())
     }
 
-    private fun mapImagePathToAbsolute(path: String?): String? {
-        return path?.let { "$thumbnailBasePath$it" }
+    private fun String.mapImagePathToAbsolute(): ImageModel {
+        return ImageModel(
+            "${movieDbImagesConfig.baseUrl}/${movieDbImagesConfig.thumbnailSize}$this",
+            "${movieDbImagesConfig.baseUrl}/${movieDbImagesConfig.originalSize}$this"
+        )
     }
 
     fun toModel(movie: MoviesDbDetailDto): MovieDetailModel {
@@ -35,8 +38,8 @@ class MoviesDbApiMapper(@ConfigProperty(name = "movies-db.images.base.thumbnail"
             movie.tagline,
             movie.voteAverage,
             movie.voteCount,
-            mapImagePathToAbsolute(movie.posterPath),
-            mapImagePathToAbsolute(movie.backdropPath),
+            movie.posterPath?.mapImagePathToAbsolute(),
+            movie.backdropPath?.mapImagePathToAbsolute(),
             modelGenres
         )
     }

@@ -14,8 +14,8 @@ data class MovieDetailDto(
     val voteAverage: Double,
     val voteCount: Int,
 
-    val posterPath: String?,
-    val backdropPath: String?,
+    val poster: ImageDto?,
+    val backdrop: ImageDto?,
 
     val genres: List<MovieGenreDto>
 )
