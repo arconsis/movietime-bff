@@ -1,0 +1,87 @@
+{
+	"info": {
+		"_postman_id": "3e4a74d5-3eff-4a93-911a-b41b52883d13",
+		"name": "Movietime BFF",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "search movies",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/movies?query=marvel",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"movies"
+					],
+					"query": [
+						{
+							"key": "query",
+							"value": "marvel"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get movie by id",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/movies/:movieId",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"movies",
+						":movieId"
+					],
+					"variable": [
+						{
+							"key": "movieId",
+							"value": "299537"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get movie favorites",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/movies/lists/favorites?user=Andreas",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"movies",
+						"lists",
+						"favorites"
+					],
+					"query": [
+						{
+							"key": "user",
+							"value": "Andreas"
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
