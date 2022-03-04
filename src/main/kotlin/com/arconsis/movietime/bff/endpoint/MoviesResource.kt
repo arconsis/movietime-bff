@@ -1,6 +1,7 @@
 package com.arconsis.movietime.bff.endpoint
 
 import com.arconsis.movietime.bff.endpoint.dto.*
+import com.arconsis.movietime.bff.lists.MoviesListService
 import com.arconsis.movietime.bff.model.ImageModel
 import com.arconsis.movietime.bff.model.MovieDetailModel
 import com.arconsis.movietime.bff.model.MovieSearchModel
@@ -14,7 +15,10 @@ import javax.ws.rs.Produces
 import javax.ws.rs.core.MediaType
 
 @Path("/movies")
-class MoviesResource(private val moviesDbService: MoviesDbService) {
+class MoviesResource(
+    private val moviesDbService: MoviesDbService,
+    private val moviesListService: MoviesListService
+) {
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
@@ -29,6 +33,13 @@ class MoviesResource(private val moviesDbService: MoviesDbService) {
     fun getMovieById(@RestPath movieId: Int): MovieDetailDto {
         return moviesDbService.getMovieById(movieId)?.toResponseDto() ?: throw NotFoundException()
     }
+
+    @GET
+    @Path("/lists/{listName}")
+    @Produces(MediaType.APPLICATION_JSON)
+    fun getMovieList(@RestPath listName: String, @RestQuery user: String): MoviesUserListDto {
+        return moviesListService.getMovieListForUser(user, listName).toUserMovieListResponseDto(listName)
+    }
 }
 
 private fun List<MovieSearchModel>.toResponseDtos(): MoviesListDto = MoviesListDto(map { it.toResponseDto() })
@@ -41,3 +52,7 @@ private fun MovieDetailModel.toResponseDto(): MovieDetailDto {
 }
 
 private fun ImageModel.toResponseDto(): ImageDto = ImageDto(thumbnail, original)
+
+private fun List<MovieDetailModel>.toResponseDtos(): List<MovieDetailDto> = map { it.toResponseDto() }
+
+private fun List<MovieDetailModel>.toUserMovieListResponseDto(listName: String): MoviesUserListDto = MoviesUserListDto(listName, this.toResponseDtos())

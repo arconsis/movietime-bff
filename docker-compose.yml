@@ -1,0 +1,21 @@
+version: '3.8'
+
+services:
+
+  movietime-bff-db:
+    image: postgres:14-alpine
+    restart: on-failure
+    ports:
+      - "7432:5432"
+
+    environment:
+      POSTGRES_DB: movietime-db
+      POSTGRES_USER: movietime-user
+      POSTGRES_PASSWORD: abc1234efg
+
+    volumes:
+      - movietime-db:/var/lib/postgresql/data/
+
+
+volumes:
+  movietime-db:
