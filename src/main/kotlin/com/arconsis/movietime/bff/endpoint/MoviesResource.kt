@@ -6,12 +6,10 @@ import com.arconsis.movietime.bff.model.ImageModel
 import com.arconsis.movietime.bff.model.MovieDetailModel
 import com.arconsis.movietime.bff.model.MovieSearchModel
 import com.arconsis.movietime.bff.moviesdb.api.MoviesDbService
+import org.jboss.resteasy.reactive.Cache
 import org.jboss.resteasy.reactive.RestPath
 import org.jboss.resteasy.reactive.RestQuery
-import javax.ws.rs.GET
-import javax.ws.rs.NotFoundException
-import javax.ws.rs.Path
-import javax.ws.rs.Produces
+import javax.ws.rs.*
 import javax.ws.rs.core.MediaType
 
 @Path("/movies")
@@ -29,6 +27,7 @@ class MoviesResource(
 
     @GET
     @Path("/{movieId}")
+    @Cache(maxAge = 2 * 60 * 60)
     @Produces(MediaType.APPLICATION_JSON)
     fun getMovieById(@RestPath movieId: Int): MovieDetailDto {
         return moviesDbService.getMovieById(movieId)?.toResponseDto() ?: throw NotFoundException()
@@ -39,6 +38,19 @@ class MoviesResource(
     @Produces(MediaType.APPLICATION_JSON)
     fun getMovieList(@RestPath listName: String, @RestQuery user: String): MoviesUserListDto {
         return moviesListService.getMovieListForUser(user, listName).toUserMovieListResponseDto(listName)
+    }
+
+    @POST
+    @Path("/lists/{listName}")
+    @Consumes(MediaType.APPLICATION_JSON)
+    fun addMovieToList(@RestPath listName: String, @RestQuery user: String, movieId: MovieIdDto) {
+        return moviesListService.addMovieToList(listName, user, movieId.id)
+    }
+
+    @DELETE
+    @Path("/lists/{listName}/{movieId}")
+    fun deleteMovieFromList(@RestPath listName: String, @RestPath movieId: Int, @RestQuery user: String) {
+        return moviesListService.deleteMovieFromList(listName, user, movieId)
     }
 }
 

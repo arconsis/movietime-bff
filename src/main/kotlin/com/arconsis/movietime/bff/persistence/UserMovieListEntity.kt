@@ -1,11 +1,13 @@
 package com.arconsis.movietime.bff.persistence
 
-import javax.persistence.Column
-import javax.persistence.Entity
-import javax.persistence.GeneratedValue
-import javax.persistence.Id
+import javax.persistence.*
 
 @Entity
+@Table(
+    uniqueConstraints = [
+        UniqueConstraint(name = "userId_listName_movieId_unique", columnNames = ["userId", "listName", "movieId"])
+    ]
+)
 class UserMovieListEntity() {
     @Id
     @GeneratedValue
