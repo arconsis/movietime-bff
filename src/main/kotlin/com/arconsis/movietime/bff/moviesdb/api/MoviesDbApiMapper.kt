@@ -1,18 +1,23 @@
 package com.arconsis.movietime.bff.moviesdb.api
 
-import com.arconsis.movietime.bff.model.ImageModel
-import com.arconsis.movietime.bff.model.MovieDetailModel
-import com.arconsis.movietime.bff.model.MovieGenreModel
-import com.arconsis.movietime.bff.model.MovieSearchModel
+import com.arconsis.movietime.bff.model.*
 import com.arconsis.movietime.bff.moviesdb.api.dto.MoviesDbDetailDto
 import com.arconsis.movietime.bff.moviesdb.api.dto.MoviesDbGenreDto
 import com.arconsis.movietime.bff.moviesdb.api.dto.MoviesDbSearchResultItemDto
+import com.arconsis.movietime.bff.moviesdb.api.dto.MoviesDbSearchResultsDto
 import javax.enterprise.context.ApplicationScoped
 
 @ApplicationScoped
 class MoviesDbApiMapper(private val movieDbImagesConfig: MovieDbImagesConfig) {
 
-    fun toSearchResultModel(searchItems: List<MoviesDbSearchResultItemDto>): List<MovieSearchModel> = searchItems.map { it.toModel() }
+    fun toSearchResultModel(searchResult: MoviesDbSearchResultsDto): PagedResultModel<MovieSearchModel> {
+        return PagedResultModel(
+            searchResult.page,
+            searchResult.totalPages,
+            searchResult.totalResults,
+            searchResult.results.map { it.toModel() }
+        )
+    }
 
     private fun MoviesDbSearchResultItemDto.toModel(): MovieSearchModel {
         return MovieSearchModel(id, title, originalTitle, overview, releaseDate, posterPath?.mapImagePathToAbsolute())

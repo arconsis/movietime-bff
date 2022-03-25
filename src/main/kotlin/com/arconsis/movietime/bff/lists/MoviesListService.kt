@@ -12,9 +12,9 @@ class MoviesListService(
     private val movieListRepository: MovieListRepository
 ) {
 
-    fun getMovieListForUser(userId: String, listName: String): List<MovieDetailModel> {
+    fun getMovieListForUser(userId: String, listName: String, acceptLanguage: String?): List<MovieDetailModel> {
         val movieIds = movieListRepository.getMovieIdsForList(userId, listName)
-        return movieIds.mapNotNull { moviesDbService.getMovieById(it) }
+        return movieIds.mapNotNull { moviesDbService.getMovieById(it, acceptLanguage) }
     }
 
     @Transactional

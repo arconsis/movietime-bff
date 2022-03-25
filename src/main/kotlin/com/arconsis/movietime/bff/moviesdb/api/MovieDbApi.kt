@@ -13,7 +13,7 @@ interface MovieDbApi {
 
     @GET
     @Path("/search/movie")
-    fun searchMovies(@RestQuery("api_key") apiKey: String, @RestQuery language: String, @RestQuery query: String): MoviesDbSearchResultsDto
+    fun searchMovies(@RestQuery("api_key") apiKey: String, @RestQuery language: String, @RestQuery query: String, @RestQuery page: Int?): MoviesDbSearchResultsDto
 
     @GET
     @Path("/movie/{movieId}")

@@ -2,6 +2,7 @@ package com.arconsis.movietime.bff.moviesdb.api
 
 import com.arconsis.movietime.bff.model.MovieDetailModel
 import com.arconsis.movietime.bff.model.MovieSearchModel
+import com.arconsis.movietime.bff.model.PagedResultModel
 import com.arconsis.movietime.bff.moviesdb.api.dto.MoviesDbDetailDto
 import org.eclipse.microprofile.config.inject.ConfigProperty
 import org.eclipse.microprofile.rest.client.inject.RestClient
@@ -9,7 +10,6 @@ import org.jboss.resteasy.reactive.RestResponse
 import javax.enterprise.context.ApplicationScoped
 import javax.ws.rs.InternalServerErrorException
 
-private const val locale = "de"
 
 @ApplicationScoped
 class MoviesDbService(
@@ -18,13 +18,13 @@ class MoviesDbService(
     private val moviesDbApiMapper: MoviesDbApiMapper
 ) {
 
-    fun searchMovies(query: String): List<MovieSearchModel> {
-        val moviesResponse = movieDbApi.searchMovies(apiKey, locale, query)
-        return moviesDbApiMapper.toSearchResultModel(moviesResponse.results)
+    fun searchMovies(query: String, page: Int?, acceptLanguage: String?): PagedResultModel<MovieSearchModel> {
+        val moviesResponse = movieDbApi.searchMovies(apiKey, acceptLanguage ?: DEFAULT_LANGUAGE, query, page)
+        return moviesDbApiMapper.toSearchResultModel(moviesResponse)
     }
 
-    fun getMovieById(movieId: Int): MovieDetailModel? {
-        val movieResponse = movieDbApi.getMovieById(apiKey, locale, movieId)
+    fun getMovieById(movieId: Int, acceptLanguage: String?): MovieDetailModel? {
+        val movieResponse = movieDbApi.getMovieById(apiKey, acceptLanguage ?: DEFAULT_LANGUAGE, movieId)
 
         return when (movieResponse.status) {
             RestResponse.StatusCode.OK -> {
@@ -36,5 +36,10 @@ class MoviesDbService(
         }
     }
 
+
+    companion object {
+        private const val DEFAULT_LANGUAGE = "en"
+
+    }
 }
 
