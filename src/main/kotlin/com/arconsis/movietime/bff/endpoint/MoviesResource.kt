@@ -7,6 +7,7 @@ import com.arconsis.movietime.bff.model.MovieDetailModel
 import com.arconsis.movietime.bff.model.MovieSearchModel
 import com.arconsis.movietime.bff.model.PagedResultModel
 import com.arconsis.movietime.bff.moviesdb.api.MoviesDbService
+import com.arconsis.movietime.bff.utils.toInstant
 import org.jboss.resteasy.reactive.Cache
 import org.jboss.resteasy.reactive.RestHeader
 import org.jboss.resteasy.reactive.RestPath
@@ -64,11 +65,25 @@ private fun PagedResultModel<MovieSearchModel>.toResponseDtos(): PagedResultsDto
     results.map { it.toResponseDto() }
 )
 
-private fun MovieSearchModel.toResponseDto(): MovieListItemDto = MovieListItemDto(id, title, originalTitle, description, releaseDate, poster?.toResponseDto())
+private fun MovieSearchModel.toResponseDto(): MovieListItemDto = MovieListItemDto(id, title, originalTitle, description, releaseDate?.toInstant(), poster?.toResponseDto())
 
 private fun MovieDetailModel.toResponseDto(): MovieDetailDto {
     val genreDto = genres.map { MovieGenreDto(it.id, it.name) }
-    return MovieDetailDto(id, title, originalTitle, description, releaseDate, adult, runtime, tagline, voteAverage, voteCount, poster?.toResponseDto(), backdrop?.toResponseDto(), genreDto)
+    return MovieDetailDto(
+        id,
+        title,
+        originalTitle,
+        description,
+        releaseDate?.toInstant(),
+        adult,
+        runtime,
+        tagline,
+        voteAverage,
+        voteCount,
+        poster?.toResponseDto(),
+        backdrop?.toResponseDto(),
+        genreDto
+    )
 }
 
 private fun ImageModel.toResponseDto(): ImageDto = ImageDto(thumbnail, original)
@@ -76,3 +91,5 @@ private fun ImageModel.toResponseDto(): ImageDto = ImageDto(thumbnail, original)
 private fun List<MovieDetailModel>.toResponseDtos(): List<MovieDetailDto> = map { it.toResponseDto() }
 
 private fun List<MovieDetailModel>.toUserMovieListResponseDto(listName: String): MoviesUserListDto = MoviesUserListDto(listName, this.toResponseDtos())
+
+

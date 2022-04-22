@@ -1,5 +1,6 @@
 package com.arconsis.movietime.bff.endpoint.dto
 
+import java.time.Instant
 import java.time.LocalDate
 
 data class MovieDetailDto(
@@ -7,7 +8,7 @@ data class MovieDetailDto(
     val title: String,
     val originalTitle: String,
     val description: String,
-    val releaseDate: LocalDate?,
+    val releaseDate: Instant?,
     val adult: Boolean,
 
     val runtime: Int?,
