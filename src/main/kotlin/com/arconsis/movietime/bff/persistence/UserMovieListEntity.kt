@@ -1,17 +1,18 @@
 package com.arconsis.movietime.bff.persistence
 
+import java.util.*
 import javax.persistence.*
 
 @Entity
 @Table(
     uniqueConstraints = [
-        UniqueConstraint(name = "userId_listName_movieId_unique", columnNames = ["userId", "listName", "movieId"])
+        UniqueConstraint(name = "userId_listName_unique", columnNames = ["userId", "listName"])
     ]
 )
 class UserMovieListEntity() {
     @Id
-    @GeneratedValue
-    var id: Long? = null
+    @GeneratedValue(generator = "UUID")
+    var id: UUID? = null
 
     @Column(nullable = false)
     lateinit var userId: String
@@ -19,12 +20,8 @@ class UserMovieListEntity() {
     @Column(nullable = false)
     lateinit var listName: String
 
-    @Column(nullable = false)
-    var movieId: Int = -1
-
-    constructor(userId: String, listName: String, movieId: Int) : this() {
+    constructor(userId: String, listName: String) : this() {
         this.userId = userId
         this.listName = listName
-        this.movieId = movieId
     }
 }

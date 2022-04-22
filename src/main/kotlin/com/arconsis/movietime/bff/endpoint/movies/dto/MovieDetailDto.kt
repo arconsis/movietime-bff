@@ -1,4 +1,4 @@
-package com.arconsis.movietime.bff.endpoint.dto
+package com.arconsis.movietime.bff.endpoint.movies.dto
 
 data class MovieDetailDto(
     val id: Int,

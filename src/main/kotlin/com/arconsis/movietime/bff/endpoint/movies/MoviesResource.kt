@@ -1,7 +1,6 @@
-package com.arconsis.movietime.bff.endpoint
+package com.arconsis.movietime.bff.endpoint.movies
 
-import com.arconsis.movietime.bff.endpoint.dto.*
-import com.arconsis.movietime.bff.lists.MoviesListService
+import com.arconsis.movietime.bff.endpoint.movies.dto.*
 import com.arconsis.movietime.bff.model.ImageModel
 import com.arconsis.movietime.bff.model.MovieDetailModel
 import com.arconsis.movietime.bff.model.MovieSearchModel
@@ -11,15 +10,15 @@ import org.jboss.resteasy.reactive.Cache
 import org.jboss.resteasy.reactive.RestHeader
 import org.jboss.resteasy.reactive.RestPath
 import org.jboss.resteasy.reactive.RestQuery
-import javax.ws.rs.*
+import javax.ws.rs.GET
+import javax.ws.rs.NotFoundException
+import javax.ws.rs.Path
+import javax.ws.rs.Produces
 import javax.ws.rs.core.HttpHeaders
 import javax.ws.rs.core.MediaType
 
 @Path("/movies")
-class MoviesResource(
-    private val moviesDbService: MoviesDbService,
-    private val moviesListService: MoviesListService
-) {
+class MoviesResource(private val moviesDbService: MoviesDbService) {
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
@@ -34,26 +33,6 @@ class MoviesResource(
     @Produces(MediaType.APPLICATION_JSON)
     fun getMovieById(@RestPath movieId: Int, @RestHeader(HttpHeaders.ACCEPT_LANGUAGE) acceptLanguage: String?): MovieDetailDto {
         return moviesDbService.getMovieById(movieId, acceptLanguage)?.toResponseDto() ?: throw NotFoundException()
-    }
-
-    @GET
-    @Path("/lists/{listName}")
-    @Produces(MediaType.APPLICATION_JSON)
-    fun getMovieList(@RestPath listName: String, @RestQuery user: String, @RestHeader(HttpHeaders.ACCEPT_LANGUAGE) acceptLanguage: String?): MoviesUserListDto {
-        return moviesListService.getMovieListForUser(user, listName, acceptLanguage).toUserMovieListResponseDto(listName)
-    }
-
-    @POST
-    @Path("/lists/{listName}")
-    @Consumes(MediaType.APPLICATION_JSON)
-    fun addMovieToList(@RestPath listName: String, @RestQuery user: String, movieId: MovieIdDto) {
-        return moviesListService.addMovieToList(listName, user, movieId.id)
-    }
-
-    @DELETE
-    @Path("/lists/{listName}/{movieId}")
-    fun deleteMovieFromList(@RestPath listName: String, @RestPath movieId: Int, @RestQuery user: String) {
-        return moviesListService.deleteMovieFromList(listName, user, movieId)
     }
 }
 
@@ -72,7 +51,3 @@ private fun MovieDetailModel.toResponseDto(): MovieDetailDto {
 }
 
 private fun ImageModel.toResponseDto(): ImageDto = ImageDto(thumbnail, original)
-
-private fun List<MovieDetailModel>.toResponseDtos(): List<MovieDetailDto> = map { it.toResponseDto() }
-
-private fun List<MovieDetailModel>.toUserMovieListResponseDto(listName: String): MoviesUserListDto = MoviesUserListDto(listName, this.toResponseDtos())
