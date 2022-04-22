@@ -1,6 +1,7 @@
 package com.arconsis.movietime.bff.moviesdb.api.dto
 
 import com.fasterxml.jackson.annotation.JsonProperty
+import java.time.LocalDate
 
 data class MoviesDbDetailDto(
     val id: Int,
@@ -9,7 +10,7 @@ data class MoviesDbDetailDto(
     val originalTitle: String,
     val overview: String,
     @JsonProperty("release_date")
-    val releaseDate: String,
+    val releaseDate: LocalDate?,
     val adult: Boolean,
 
     val runtime: Int?,

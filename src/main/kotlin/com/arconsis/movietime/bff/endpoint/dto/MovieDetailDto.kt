@@ -1,11 +1,13 @@
 package com.arconsis.movietime.bff.endpoint.dto
 
+import java.time.LocalDate
+
 data class MovieDetailDto(
     val id: Int,
     val title: String,
     val originalTitle: String,
     val description: String,
-    val releaseDate: String,
+    val releaseDate: LocalDate?,
     val adult: Boolean,
 
     val runtime: Int?,

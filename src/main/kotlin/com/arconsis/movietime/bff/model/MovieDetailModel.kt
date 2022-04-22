@@ -1,12 +1,14 @@
 package com.arconsis.movietime.bff.model
 
+import java.time.LocalDate
+
 data class MovieDetailModel(
     val id: Int,
     val title: String,
     val originalTitle: String,
 
     val description: String,
-    val releaseDate: String,
+    val releaseDate: LocalDate?,
     val adult: Boolean,
 
     val runtime: Int?,
