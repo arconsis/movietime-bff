@@ -9,4 +9,7 @@ data class MovieSearchModel(
     val description: String,
     val releaseDate: LocalDate?,
     val poster: ImageModel?,
+
+    val voteCount: Int,
+    val voteAverage: Double
 )

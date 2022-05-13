@@ -20,7 +20,7 @@ class MoviesDbApiMapper(private val movieDbImagesConfig: MovieDbImagesConfig) {
     }
 
     private fun MoviesDbSearchResultItemDto.toModel(): MovieSearchModel {
-        return MovieSearchModel(id, title, originalTitle, overview, releaseDate, posterPath?.mapImagePathToAbsolute())
+        return MovieSearchModel(id, title, originalTitle, overview, releaseDate, posterPath?.mapImagePathToAbsolute(), voteCount, voteAverage)
     }
 
     private fun String.mapImagePathToAbsolute(): ImageModel {

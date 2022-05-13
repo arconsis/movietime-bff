@@ -13,4 +13,7 @@ data class MoviesDbSearchResultItemDto(
     val releaseDate: LocalDate?,
     @JsonProperty("poster_path")
     val posterPath: String?,
+
+    @JsonProperty("vote_count") val voteCount: Int,
+    @JsonProperty("vote_average") val voteAverage: Double
 )

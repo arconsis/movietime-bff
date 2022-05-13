@@ -2,10 +2,7 @@ package com.arconsis.movietime.bff.endpoint
 
 import com.arconsis.movietime.bff.endpoint.dto.*
 import com.arconsis.movietime.bff.lists.MoviesListService
-import com.arconsis.movietime.bff.model.ImageModel
-import com.arconsis.movietime.bff.model.MovieDetailModel
-import com.arconsis.movietime.bff.model.MovieSearchModel
-import com.arconsis.movietime.bff.model.PagedResultModel
+import com.arconsis.movietime.bff.model.*
 import com.arconsis.movietime.bff.moviesdb.api.MoviesDbService
 import com.arconsis.movietime.bff.utils.toInstant
 import org.jboss.resteasy.reactive.Cache
@@ -24,8 +21,17 @@ class MoviesResource(
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    fun searchMovies(@RestQuery query: String, @RestQuery page: Int?, @RestHeader(HttpHeaders.ACCEPT_LANGUAGE) acceptLanguage: String?): PagedResultsDto<MovieListItemDto> {
-        val moviesSearchResult = moviesDbService.searchMovies(query, page, acceptLanguage)
+    fun searchMovies(
+        @RestQuery query: String?,
+        @RestQuery collection: String?,
+        @RestQuery page: Int?,
+        @RestHeader(HttpHeaders.ACCEPT_LANGUAGE) acceptLanguage: String?
+    ): PagedResultsDto<MovieListItemDto> {
+        if (query == null && collection == null) {
+            throw BadRequestException("Please specify at least query OR collection parameter.")
+        }
+
+        val moviesSearchResult = moviesDbService.getMovies(query, collection?.toMovieCollectionName(), page, acceptLanguage)
         return moviesSearchResult.toResponseDtos()
     }
 
@@ -65,7 +71,7 @@ private fun PagedResultModel<MovieSearchModel>.toResponseDtos(): PagedResultsDto
     results.map { it.toResponseDto() }
 )
 
-private fun MovieSearchModel.toResponseDto(): MovieListItemDto = MovieListItemDto(id, title, originalTitle, description, releaseDate?.toInstant(), poster?.toResponseDto())
+private fun MovieSearchModel.toResponseDto(): MovieListItemDto = MovieListItemDto(id, title, originalTitle, description, releaseDate?.toInstant(), poster?.toResponseDto(), voteCount, voteAverage)
 
 private fun MovieDetailModel.toResponseDto(): MovieDetailDto {
     val genreDto = genres.map { MovieGenreDto(it.id, it.name) }
@@ -92,4 +98,10 @@ private fun List<MovieDetailModel>.toResponseDtos(): List<MovieDetailDto> = map 
 
 private fun List<MovieDetailModel>.toUserMovieListResponseDto(listName: String): MoviesUserListDto = MoviesUserListDto(listName, this.toResponseDtos())
 
-
+private fun String.toMovieCollectionName(): MovieCollectionName = when (this) {
+    "now-playing" -> MovieCollectionName.NOW_PLAYING
+    "popular" -> MovieCollectionName.POPULAR
+    "top-rated" -> MovieCollectionName.TOP_RATED
+    "upcoming" -> MovieCollectionName.UPCOMING
+    else -> throw BadRequestException("Collection of name $this is not supported.")
+}
