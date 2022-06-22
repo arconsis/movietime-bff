@@ -2,62 +2,115 @@
 	"info": {
 		"_postman_id": "3e4a74d5-3eff-4a93-911a-b41b52883d13",
 		"name": "Movietime BFF",
-		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "4591907"
 	},
 	"item": [
 		{
-			"name": "search movies",
-			"request": {
-				"method": "GET",
-				"header": [],
-				"url": {
-					"raw": "http://localhost:8080/movies?query=marvel",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "8080",
-					"path": [
-						"movies"
-					],
-					"query": [
-						{
-							"key": "query",
-							"value": "marvel"
+			"name": "movies",
+			"item": [
+				{
+					"name": "search movies",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept-Language",
+								"value": "en-US",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:8080/movies?query=marvel&page=1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"movies"
+							],
+							"query": [
+								{
+									"key": "query",
+									"value": "marvel"
+								},
+								{
+									"key": "page",
+									"value": "1"
+								}
+							]
 						}
-					]
+					},
+					"response": []
+				},
+				{
+					"name": "get movie collection",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept-Language",
+								"value": "en-US",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:8080/movies?collection=popular",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"movies"
+							],
+							"query": [
+								{
+									"key": "collection",
+									"value": "popular"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get movie by id",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept-Language",
+								"value": "de-DE",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:8080/movies/:movieId",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"movies",
+								":movieId"
+							],
+							"variable": [
+								{
+									"key": "movieId",
+									"value": "299537"
+								}
+							]
+						}
+					},
+					"response": []
 				}
-			},
-			"response": []
+			]
 		},
 		{
-			"name": "get movie by id",
-			"request": {
-				"method": "GET",
-				"header": [],
-				"url": {
-					"raw": "http://localhost:8080/movies/:movieId",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "8080",
-					"path": [
-						"movies",
-						":movieId"
-					],
-					"variable": [
-						{
-							"key": "movieId",
-							"value": "299537"
-						}
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "get movie favorites",
+			"name": "get movie from list favorites",
 			"request": {
 				"method": "GET",
 				"header": [],
@@ -77,6 +130,141 @@
 						{
 							"key": "user",
 							"value": "Andreas"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "add movie to list favorite",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"id\": 528222\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/movies/lists/favorites?user=Stephan",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"movies",
+						"lists",
+						"favorites"
+					],
+					"query": [
+						{
+							"key": "user",
+							"value": "Stephan"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "remove movie from list favorite",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/movies/lists/favorites/528222?user=Stephan",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"movies",
+						"lists",
+						"favorites",
+						"528222"
+					],
+					"query": [
+						{
+							"key": "user",
+							"value": "Stephan"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "create movie list",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"name\": \"favorites\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/movies/lists?user=Thimo",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"movies",
+						"lists"
+					],
+					"query": [
+						{
+							"key": "user",
+							"value": "Thimo"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "update movie list",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"name\": \"favorites new\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/movies/lists/8b351309-fc24-4123-8584-6f1c6af9b638?user=Thimo",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"movies",
+						"lists",
+						"8b351309-fc24-4123-8584-6f1c6af9b638"
+					],
+					"query": [
+						{
+							"key": "user",
+							"value": "Thimo"
 						}
 					]
 				}
