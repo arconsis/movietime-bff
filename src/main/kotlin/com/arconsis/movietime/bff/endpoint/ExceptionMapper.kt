@@ -2,6 +2,7 @@ package com.arconsis.movietime.bff.endpoint
 
 import com.arconsis.movietime.bff.endpoint.dto.error.ErrorDto
 import com.arconsis.movietime.bff.model.exceptions.MovieApiErrorException
+import io.quarkus.security.UnauthorizedException
 import org.jboss.logging.Logger
 import org.jboss.logging.Logger.Level.ERROR
 import org.jboss.resteasy.reactive.RestResponse
@@ -23,6 +24,10 @@ class ExceptionMapper {
     @ServerExceptionMapper
     fun mapException(exception: WebApplicationException): Response {
         return Response.status(exception.response.status).entity(ErrorDto(exception.message ?: "UNKNOWN ERROR")).build()
+    }
+    @ServerExceptionMapper
+    fun mapException(exception: UnauthorizedException): Response {
+        return Response.status(RestResponse.StatusCode.UNAUTHORIZED).entity(ErrorDto(exception.message ?: "Unauthorized")).build()
     }
 
     @ServerExceptionMapper

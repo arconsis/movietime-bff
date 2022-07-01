@@ -22,7 +22,7 @@ import javax.ws.rs.core.Response
 class MoviesDbService(
     @RestClient private val movieDbApi: MovieDbApi,
     @ConfigProperty(name = "movies-db.api-key") private val apiKey: String,
-    private val moviesDbApiMapper: MoviesDbApiMapper
+    private val moviesDbApiMapper: MoviesDbApiMapper,
 ) {
 
     fun getMovies(query: String?, collection: MovieCollectionName?, page: Int?, acceptLanguage: String?): PagedResultModel<MovieSearchModel> {
