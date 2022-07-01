@@ -1,6 +1,6 @@
 plugins {
-    id 'org.jetbrains.kotlin.jvm' version "1.6.10"
-    id "org.jetbrains.kotlin.plugin.allopen" version "1.6.10"
+    id 'org.jetbrains.kotlin.jvm' version "1.6.21"
+    id "org.jetbrains.kotlin.plugin.allopen" version "1.6.21"
     id 'io.quarkus'
 }
 
@@ -27,6 +27,8 @@ dependencies {
     implementation 'io.quarkus:quarkus-hibernate-orm-panache'
     implementation 'io.quarkus:quarkus-jdbc-postgresql'
 
+    implementation 'io.quarkus:quarkus-oidc'
+
     testImplementation 'io.quarkus:quarkus-junit5'
     testImplementation 'io.rest-assured:rest-assured'
 }
@@ -42,6 +44,9 @@ java {
 allOpen {
     annotation("javax.ws.rs.Path")
     annotation("javax.enterprise.context.ApplicationScoped")
+    annotation("javax.enterprise.context.RequestScoped")
+    annotation("javax.persistence.Entity")
+    annotation("com.arconsis.movietime.bff.utils.AllOpen")
     annotation("io.quarkus.test.junit.QuarkusTest")
 }
 
