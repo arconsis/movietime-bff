@@ -1,0 +1,14 @@
+apiVersion: v2
+name: movietime-bff
+description: An awesome movietime bff helm chart
+
+type: application
+version: 0.1.0
+appVersion: "1.0.0"
+
+
+dependencies:
+  - name: postgresql
+    repository: "https://charts.bitnami.com/bitnami"
+    version: 11.6.*
+    alias: moviedatabase
