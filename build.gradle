@@ -1,6 +1,6 @@
 plugins {
-    id 'org.jetbrains.kotlin.jvm' version "1.6.21"
-    id "org.jetbrains.kotlin.plugin.allopen" version "1.6.21"
+    id 'org.jetbrains.kotlin.jvm' version "1.7.20"
+    id "org.jetbrains.kotlin.plugin.allopen" version "1.7.20"
     id 'io.quarkus'
 }
 
@@ -38,8 +38,8 @@ group 'com.arconsis.movietime.bff'
 version '1.0.0-SNAPSHOT'
 
 java {
-    sourceCompatibility = JavaVersion.VERSION_11
-    targetCompatibility = JavaVersion.VERSION_11
+    sourceCompatibility = JavaVersion.VERSION_17
+    targetCompatibility = JavaVersion.VERSION_17
 }
 
 allOpen {
@@ -52,10 +52,10 @@ allOpen {
 }
 
 compileKotlin {
-    kotlinOptions.jvmTarget = JavaVersion.VERSION_11
+    kotlinOptions.jvmTarget = JavaVersion.VERSION_17
     kotlinOptions.javaParameters = true
 }
 
 compileTestKotlin {
-    kotlinOptions.jvmTarget = JavaVersion.VERSION_11
+    kotlinOptions.jvmTarget = JavaVersion.VERSION_17
 }
