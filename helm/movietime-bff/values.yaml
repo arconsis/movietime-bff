@@ -40,14 +40,14 @@ ingress:
     kubernetes.io/tls-acme: "true"
     cert-manager.io/cluster-issuer: letsencrypt-prod
   hosts:
-    - host: movietime-bff.dev.k8s.fa.arconsis.com
+    - host: movietime-bff.k8s.dev.arconsis.com
       paths:
         - path: /api
           pathType: ImplementationSpecific
   tls:
     - secretName: movietime-bff-tls
       hosts:
-        - movietime-bff.dev.k8s.fa.arconsis.com
+        - movietime-bff.k8s.dev.arconsis.com
 
 
 resources:
